@@ -1,0 +1,15 @@
+# Unity generated folders (add these once you create the real Unity project)
+/Library/
+/Temp/
+/Obj/
+/Build/
+/Builds/
+/Logs/
+/UserSettings/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+.vs/
+.vscode/
