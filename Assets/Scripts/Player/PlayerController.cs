@@ -6,12 +6,18 @@ namespace Biziwe.Player
     /// Basic third-person character controller — Phase 1.
     /// Handles walking, running, jumping and crouching using Unity's CharacterController.
     ///
+    /// Combat note: this script doesn't handle damage itself — add a Health
+    /// component (Assets/Scripts/Systems/Health.cs) alongside it. That's what
+    /// lets police, NPCs, and explosions actually hurt the player. This script
+    /// subscribes to it in Awake() to disable movement on death.
+    ///
     /// SETUP (do this in the Unity Editor once you have a PC):
     /// 1. Create a 3D capsule (or import a character model) as your player.
     /// 2. Add a CharacterController component to it (Unity adds this automatically
     ///    if you use GameObject > 3D Object > Capsule, but add manually if needed).
-    /// 3. Drag this script onto the player object.
-    /// 4. Create an empty child GameObject called "CameraTarget" positioned at head height,
+    /// 3. Add a Health component (Assets/Scripts/Systems/Health.cs).
+    /// 4. Drag this script onto the player object.
+    /// 5. Create an empty child GameObject called "CameraTarget" positioned at head height,
     ///    used by CameraFollow.cs.
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
@@ -31,9 +37,11 @@ namespace Biziwe.Player
         public Transform cameraTransform;
 
         private CharacterController controller;
+        private Systems.Health health;
         private Vector3 velocity;
         private float turnSmoothVelocity;
         private bool isCrouching;
+        private bool isDead;
 
         // Public state other scripts (AI, mission triggers) can read.
         public bool IsRunning { get; private set; }
@@ -44,10 +52,29 @@ namespace Biziwe.Player
             controller = GetComponent<CharacterController>();
             if (cameraTransform == null && Camera.main != null)
                 cameraTransform = Camera.main.transform;
+
+            health = GetComponent<Systems.Health>();
+            if (health != null)
+                health.OnDeath += HandleDeath;
+        }
+
+        private void OnDestroy()
+        {
+            if (health != null)
+                health.OnDeath -= HandleDeath;
+        }
+
+        private void HandleDeath()
+        {
+            isDead = true;
+            // Hook: play death/ragdoll animation, trigger a respawn or game-over
+            // screen here once that UI exists.
         }
 
         private void Update()
         {
+            if (isDead) return;
+
             IsGrounded = controller.isGrounded;
             if (IsGrounded && velocity.y < 0)
                 velocity.y = -2f; // small downward force to keep grounded reliably

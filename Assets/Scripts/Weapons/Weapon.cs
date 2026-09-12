@@ -36,6 +36,7 @@ namespace Biziwe.Weapons
         public GameObject fireEffect;
         public GameObject impactEffect;
         public LayerMask hitLayers = ~0;
+        public Systems.WantedSystem wantedSystem; // optional — leave unassigned if this weapon shouldn't raise wanted level (e.g. a shooting-range prop)
 
         private int currentAmmo;
         private float lastFireTime;
@@ -77,6 +78,8 @@ namespace Biziwe.Weapons
                 if (impactEffect != null)
                     Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             }
+
+            wantedSystem?.ReportCrime(1); // firing a weapon in public is a crime, hit or miss
         }
 
         private void FireRocket(Vector3 aimDirection)
@@ -86,10 +89,12 @@ namespace Biziwe.Weapons
             GameObject rocket = Instantiate(rocketProjectilePrefab, muzzlePoint.position,
                 Quaternion.LookRotation(aimDirection));
             var rb = rocket.GetComponent<Rigidbody>();
-            if (rb != null) rb.linearVelocity = aimDirection.normalized * rocketSpeed;
+            if (rb != null) rb.velocity = aimDirection.normalized * rocketSpeed;
 
             var explosive = rocket.GetComponent<Explosive>();
             explosive?.Arm(); // detonates on its own fuse, or add an impact-trigger variant later
+
+            wantedSystem?.ReportCrime(2); // heavier weapon, bigger response
         }
 
         public void Reload(int newAmmoCount)

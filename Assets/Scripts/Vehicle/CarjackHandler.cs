@@ -18,6 +18,7 @@ namespace Biziwe.Vehicle
     {
         public bool hasDriver = true; // NPC-driven cars start with a driver
         public GameObject driverVisual; // optional NPC model sitting in the seat
+        public Systems.WantedSystem wantedSystem; // optional — carjacking in view of witnesses is a crime
 
         private VehicleController vehicleController;
         private bool playerInRange;
@@ -74,8 +75,7 @@ namespace Biziwe.Vehicle
                     driverVisual.SetActive(false); // fallback if no reaction script attached
                 }
 
-                // Hook WantedSystem.ReportCrime() here once crime detection is centralised —
-                // carjacking in view of witnesses/police should raise the wanted level.
+                wantedSystem?.ReportCrime(1); // carjacking in view of witnesses raises the wanted level
             }
         }
     }

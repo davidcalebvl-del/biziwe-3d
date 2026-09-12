@@ -32,6 +32,7 @@ namespace Biziwe.Weapons
 
         [Header("Layers")]
         public LayerMask affectedLayers = ~0; // everything by default
+        public Systems.WantedSystem wantedSystem; // optional — a blast is a serious crime if reported
 
         public void Arm()
         {
@@ -75,6 +76,22 @@ namespace Biziwe.Weapons
             }
 
             Destroy(gameObject);
+
+            wantedSystem?.ReportCrime(3); // an explosion is about as serious as it gets — straight to max
+            AlertNearbyCivilians();
+        }
+
+        private void AlertNearbyCivilians()
+        {
+            // Civilians react from further away than the blast itself — an explosion
+            // is heard/seen well beyond where it actually does damage.
+            float alertRadius = blastRadius * 2.5f;
+            Collider[] nearby = Physics.OverlapSphere(transform.position, alertRadius);
+            foreach (var col in nearby)
+            {
+                var civilian = col.GetComponent<Biziwe.AI.CivilianNpc>();
+                civilian?.ReactToDanger(transform.position);
+            }
         }
     }
 }

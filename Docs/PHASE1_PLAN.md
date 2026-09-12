@@ -13,21 +13,28 @@ project — so instead, you'll create a fresh Unity project yourself (takes 2
 minutes) and then drop these scripts in. Full steps below.
 
 ```
-Assets/Scripts/Player/PlayerController.cs      — walk, run, jump, crouch
+Assets/Scripts/Player/PlayerController.cs      — walk, run, jump, crouch, dies via Health
 Assets/Scripts/Player/CameraFollow.cs          — third-person camera
 Assets/Scripts/Vehicle/VehicleController.cs    — drivable car physics
 Assets/Scripts/Vehicle/CarjackHandler.cs        — pull driver out, take the car
 Assets/Scripts/AI/NpcController.cs             — NPC patrol + chase behaviour
-Assets/Scripts/Systems/WantedSystem.cs         — wanted-level/police response
+Assets/Scripts/AI/CarjackVictim.cs             — victim shouts, flees, seeks a car, chases, fights
+Assets/Scripts/AI/PoliceVehicleAI.cs           — police cars drive-chase the player
+Assets/Scripts/Systems/Health.cs               — shared damage/death component (player + NPCs)
+Assets/Scripts/Systems/WantedSystem.cs         — 3-star wanted level/police response
+Assets/Scripts/Systems/PoliceDispatcher.cs     — escalates police units as stars rise
 Assets/Scripts/Systems/IDamageable.cs          — shared damage interface
 Assets/Scripts/Systems/Destructible.cs         — shops/houses/cars that can be destroyed
-Assets/Scripts/Systems/EconomySystem.cs        — money balance, earn/spend
+Assets/Scripts/Systems/EconomySystem.cs        — money balance, capped at 1,000,000
 Assets/Scripts/Systems/DayNightCycle.cs        — day/night sun + ambient lighting
 Assets/Scripts/Systems/MissionManager.cs       — mission state tracking
 Assets/Scripts/Systems/MissionTrigger.cs       — start/complete a mission by location
 Assets/Scripts/Weapons/Weapon.cs               — pistols through the rocket launcher
+Assets/Scripts/Weapons/MeleeWeapon.cs          — knife combat with stealth finisher
 Assets/Scripts/Weapons/Explosive.cs            — bombs with area blast damage
+Assets/Scripts/Weapons/WeaponHolder.cs         — weapon inventory/switching
 Assets/Scripts/UI/TouchInputManager.cs         — wires on-screen controls to the above
+Assets/Scripts/UI/GameHUD.cs                   — stars, money, ammo, mission text — auto-synced
 ```
 
 ## Step-by-step setup (do this once you're on a PC/laptop)

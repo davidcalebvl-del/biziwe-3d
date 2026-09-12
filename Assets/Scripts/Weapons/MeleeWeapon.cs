@@ -27,6 +27,7 @@ namespace Biziwe.Weapons
         public Transform attackPoint;
         public LayerMask hitLayers = ~0;
         public GameObject hitEffect;
+        public Systems.WantedSystem wantedSystem; // optional — raises wanted level on a witnessed hit
 
         private float lastAttackTime;
 
@@ -52,6 +53,11 @@ namespace Biziwe.Weapons
 
                 if (hitEffect != null)
                     Instantiate(hitEffect, hit.ClosestPoint(attackPoint.position), Quaternion.identity);
+
+                // A clean stealth finisher (from behind, unseen) doesn't alert anyone.
+                // A face-to-face hit does — someone saw it happen.
+                if (!isFinisher)
+                    wantedSystem?.ReportCrime(1);
             }
         }
 

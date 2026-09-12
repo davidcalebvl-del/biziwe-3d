@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Biziwe.AI;
+using System;
 
 namespace Biziwe.Systems
 {
@@ -22,6 +23,8 @@ namespace Biziwe.Systems
         public int wantedLevel = 0;
         public int maxWantedLevel = 3; // hard cap at 3 stars by design
 
+        public event Action<int> OnWantedLevelChanged; // for HUD, PoliceDispatcher, etc.
+
         [Header("Decay")]
         public float secondsPerDecay = 8f;
         private float decayTimer;
@@ -33,9 +36,13 @@ namespace Biziwe.Systems
 
         public void ReportCrime(int severity = 1)
         {
+            int previous = wantedLevel;
             wantedLevel = Mathf.Clamp(wantedLevel + severity, 0, maxWantedLevel);
             decayTimer = 0f;
             AlertNearbyPolice();
+
+            if (wantedLevel != previous)
+                OnWantedLevelChanged?.Invoke(wantedLevel);
         }
 
         private void Update()
@@ -47,6 +54,7 @@ namespace Biziwe.Systems
             {
                 decayTimer = 0f;
                 wantedLevel = Mathf.Max(0, wantedLevel - 1);
+                OnWantedLevelChanged?.Invoke(wantedLevel);
                 if (wantedLevel == 0)
                     CallOffChase();
             }

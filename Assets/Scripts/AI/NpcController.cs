@@ -7,10 +7,16 @@ namespace Biziwe.AI
     /// Minimal NPC behaviour for Phase 1 — patrols between waypoints,
     /// and can be flagged into "chase" mode by the WantedSystem.
     ///
+    /// Combat note: add a Health component (Systems/Health.cs) alongside this
+    /// for the NPC to be damageable by weapons/explosives/melee. This script
+    /// subscribes to it in Awake() to stop movement and clear chase state on death.
+    ///
     /// SETUP:
     /// 1. Requires Unity's NavMesh: Window > AI > Navigation, bake a NavMesh for your city floor.
     /// 2. Add a NavMeshAgent component to the NPC.
-    /// 3. Drag this script onto the NPC, assign patrol waypoints (empty GameObjects placed in the scene).
+    /// 3. Add a Health component (Assets/Scripts/Systems/Health.cs).
+    /// 4. Drag this script onto the NPC, assign patrol waypoints (empty GameObjects placed in the scene).
+    /// 5. For police NPCs, tag the object "Police" and check isPolice below.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
     public class NpcController : MonoBehaviour
@@ -20,13 +26,33 @@ namespace Biziwe.AI
         public bool isPolice = false;
 
         private NavMeshAgent agent;
+        private Systems.Health health;
         private int currentPoint;
         private float waitTimer;
         private Transform chaseTarget;
+        private bool isDead;
 
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+            health = GetComponent<Systems.Health>();
+            if (health != null)
+                health.OnDeath += HandleDeath;
+        }
+
+        private void OnDestroy()
+        {
+            if (health != null)
+                health.OnDeath -= HandleDeath;
+        }
+
+        private void HandleDeath()
+        {
+            isDead = true;
+            chaseTarget = null;
+            if (agent != null && agent.isOnNavMesh)
+                agent.isStopped = true;
+            // Hook: ragdoll/death animation here once art assets exist.
         }
 
         private void Start()
@@ -37,6 +63,8 @@ namespace Biziwe.AI
 
         private void Update()
         {
+            if (isDead) return;
+
             if (chaseTarget != null)
             {
                 agent.SetDestination(chaseTarget.position);
