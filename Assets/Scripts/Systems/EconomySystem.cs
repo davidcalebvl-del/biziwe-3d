@@ -7,6 +7,10 @@ namespace Biziwe.Systems
     /// Player's persistent money balance — earn from missions/jobs, spend on
     /// weapons, vehicles, upgrades. Phase 3.
     ///
+    /// Capped at 1,000,000 by design — reaching the cap fires OnMaxBalanceReached,
+    /// which the UI can treat as a "win"/milestone moment (fireworks, a trophy
+    /// screen, whatever fits the game's tone).
+    ///
     /// SETUP:
     /// 1. Add to the same GameManager object as WantedSystem.
     /// 2. Other scripts (MissionManager, shops) call AddMoney()/SpendMoney().
@@ -16,9 +20,12 @@ namespace Biziwe.Systems
     public class EconomySystem : MonoBehaviour
     {
         public int startingBalance = 500;
+        public const int MaxBalance = 1_000_000;
         public int CurrentBalance { get; private set; }
 
         public event Action<int> OnBalanceChanged;
+        public event Action OnMaxBalanceReached;
+        private bool maxReachedFired;
 
         private void Awake()
         {
@@ -28,8 +35,14 @@ namespace Biziwe.Systems
         public void AddMoney(int amount)
         {
             if (amount <= 0) return;
-            CurrentBalance += amount;
+            CurrentBalance = Mathf.Min(CurrentBalance + amount, MaxBalance);
             OnBalanceChanged?.Invoke(CurrentBalance);
+
+            if (CurrentBalance >= MaxBalance && !maxReachedFired)
+            {
+                maxReachedFired = true;
+                OnMaxBalanceReached?.Invoke();
+            }
         }
 
         /// <returns>True if the purchase succeeded (enough balance), false otherwise.</returns>

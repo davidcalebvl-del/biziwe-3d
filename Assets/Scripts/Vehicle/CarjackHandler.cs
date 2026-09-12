@@ -62,10 +62,20 @@ namespace Biziwe.Vehicle
             hasDriver = false;
             if (driverVisual != null)
             {
-                // Simple version: disable/ragdoll the NPC driver and drop them at the roadside.
-                // A fuller version would spawn a standalone NPC that reacts (runs, calls police, etc.)
-                // — hook WantedSystem.ReportCrime() here once combat/crime detection is wired up.
-                driverVisual.SetActive(false);
+                var victim = driverVisual.GetComponent<Biziwe.AI.CarjackVictim>();
+                if (victim != null)
+                {
+                    // Real reaction: shout, flee, seek another car, chase, then stop and fight.
+                    driverVisual.transform.SetParent(null); // detach from the car
+                    victim.BeginReaction(FindObjectOfType<PlayerController>()?.transform);
+                }
+                else
+                {
+                    driverVisual.SetActive(false); // fallback if no reaction script attached
+                }
+
+                // Hook WantedSystem.ReportCrime() here once crime detection is centralised —
+                // carjacking in view of witnesses/police should raise the wanted level.
             }
         }
     }

@@ -6,19 +6,21 @@ namespace Biziwe.Systems
 {
     /// <summary>
     /// Basic wanted-level system — Phase 1.
-    /// Tracks a 0-3 star wanted level. At level 1+, nearby police NPCs start chasing the player.
+    /// Tracks a 0-3 star wanted level (3 stars is the max, by design — not 5 like
+    /// some other games). At level 1+, nearby police NPCs start chasing the player.
     /// Wanted level decays over time if the player stays out of police sight.
     ///
     /// SETUP:
     /// 1. Add this script to an empty GameObject called "GameManager" in your scene.
     /// 2. Assign the player's transform.
     /// 3. Tag all police NPCs with the "Police" tag (Unity Inspector > Tag dropdown > Add Tag).
+    /// 4. UI: bind wantedLevel to a 3-star icon display (fill stars 1 to 3 as it rises).
     /// </summary>
     public class WantedSystem : MonoBehaviour
     {
         public Transform player;
         public int wantedLevel = 0;
-        public int maxWantedLevel = 3;
+        public int maxWantedLevel = 3; // hard cap at 3 stars by design
 
         [Header("Decay")]
         public float secondsPerDecay = 8f;
