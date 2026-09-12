@@ -11,14 +11,19 @@ namespace Biziwe.AI
     /// "owner shouts, runs, finds another car, chases you down" behaviour.
     /// Phase 2.
     ///
+    /// Combat note: uses the shared Health component (Systems/Health.cs) for
+    /// damage/death, same as the player and regular NPCs — kept consistent
+    /// rather than each script tracking its own health value.
+    ///
     /// SETUP:
     /// 1. Spawn/activate this on the ejected driver when CarjackHandler.EjectDriver()
     ///    runs (hook it up there instead of just disabling the driver visual).
     /// 2. Requires a NavMeshAgent for the on-foot phases, same as NpcController.
-    /// 3. Assign nearbyVehicleSearchRadius and a layer mask for detecting parked cars.
+    /// 3. Add a Health component (Assets/Scripts/Systems/Health.cs) alongside this.
+    /// 4. Assign nearbyVehicleSearchRadius and a layer mask for detecting parked cars.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
-    public class CarjackVictim : MonoBehaviour, IDamageable
+    public class CarjackVictim : MonoBehaviour
     {
         [Header("Reaction Timing")]
         public float shoutDuration = 1.2f;
@@ -27,13 +32,13 @@ namespace Biziwe.AI
         [Header("Chase")]
         public float nearbyVehicleSearchRadius = 20f;
         public LayerMask vehicleLayer;
-        public float health = 100f;
 
         [Header("Combat")]
         public float stopAndShootDistance = 12f; // once this close behind, victim can turn and fight
 
         public VictimState State { get; private set; }
         private NavMeshAgent agent;
+        private Health health;
         private Transform player;
         private float stateTimer;
         private Vehicle.VehicleController stolenAlternateVehicle;
@@ -41,6 +46,22 @@ namespace Biziwe.AI
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+            health = GetComponent<Health>();
+            if (health != null)
+                health.OnDeath += HandleDeath;
+        }
+
+        private void OnDestroy()
+        {
+            if (health != null)
+                health.OnDeath -= HandleDeath;
+        }
+
+        private void HandleDeath()
+        {
+            player = null; // stop reacting
+            if (agent != null && agent.isOnNavMesh)
+                agent.isStopped = true;
         }
 
         public void BeginReaction(Transform playerTransform)
@@ -130,15 +151,6 @@ namespace Biziwe.AI
             }
 
             agent.SetDestination(player.position);
-        }
-
-        public void TakeDamage(float amount, Vector3 hitPoint, Vector3 hitDirection)
-        {
-            health -= amount;
-            if (health <= 0f)
-            {
-                gameObject.SetActive(false); // simple version — swap for ragdoll/death anim later
-            }
         }
     }
 }

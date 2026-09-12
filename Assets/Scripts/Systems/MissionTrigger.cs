@@ -18,10 +18,25 @@ namespace Biziwe.Systems
     public class MissionTrigger : MonoBehaviour
     {
         public MissionManager missionManager;
+
+        [Tooltip("Optional — assign a MissionData asset to auto-fill id/reward below. Leave blank to set them manually (both work).")]
+        public MissionData missionData;
+
         public string missionId;
         public bool startsMission = false;
         public bool completesMission = false;
         public int rewardMoney = 0;
+
+        private void OnValidate()
+        {
+            // Keeps manual and data-driven missions in sync without breaking
+            // scenes already set up with plain strings.
+            if (missionData != null)
+            {
+                missionId = missionData.id;
+                rewardMoney = missionData.rewardMoney;
+            }
+        }
 
         private void OnTriggerEnter(Collider other)
         {
