@@ -13,11 +13,21 @@ project — so instead, you'll create a fresh Unity project yourself (takes 2
 minutes) and then drop these scripts in. Full steps below.
 
 ```
-Assets/Scripts/Player/PlayerController.cs   — walk, run, jump, crouch
-Assets/Scripts/Player/CameraFollow.cs       — third-person camera
-Assets/Scripts/Vehicle/VehicleController.cs — drivable car physics
-Assets/Scripts/AI/NpcController.cs          — NPC patrol + chase behaviour
-Assets/Scripts/Systems/WantedSystem.cs      — basic wanted-level/police system
+Assets/Scripts/Player/PlayerController.cs      — walk, run, jump, crouch
+Assets/Scripts/Player/CameraFollow.cs          — third-person camera
+Assets/Scripts/Vehicle/VehicleController.cs    — drivable car physics
+Assets/Scripts/Vehicle/CarjackHandler.cs        — pull driver out, take the car
+Assets/Scripts/AI/NpcController.cs             — NPC patrol + chase behaviour
+Assets/Scripts/Systems/WantedSystem.cs         — wanted-level/police response
+Assets/Scripts/Systems/IDamageable.cs          — shared damage interface
+Assets/Scripts/Systems/Destructible.cs         — shops/houses/cars that can be destroyed
+Assets/Scripts/Systems/EconomySystem.cs        — money balance, earn/spend
+Assets/Scripts/Systems/DayNightCycle.cs        — day/night sun + ambient lighting
+Assets/Scripts/Systems/MissionManager.cs       — mission state tracking
+Assets/Scripts/Systems/MissionTrigger.cs       — start/complete a mission by location
+Assets/Scripts/Weapons/Weapon.cs               — pistols through the rocket launcher
+Assets/Scripts/Weapons/Explosive.cs            — bombs with area blast damage
+Assets/Scripts/UI/TouchInputManager.cs         — wires on-screen controls to the above
 ```
 
 ## Step-by-step setup (do this once you're on a PC/laptop)
