@@ -10,10 +10,11 @@ namespace Biziwe.Systems
     ///
     /// SETUP:
     /// 1. Create one empty GameObject in your scene called "GameManager".
-    /// 2. Add WantedSystem, EconomySystem, MissionManager, DayNightCycle, and
-    ///    PoliceDispatcher components to it (all already written in this repo).
+    /// 2. Add WantedSystem, EconomySystem, MissionManager, DayNightCycle,
+    ///    PoliceDispatcher, and SaveSystem components to it (all already
+    ///    written in this repo).
     /// 3. Add this script last — it grabs the sibling components automatically in
-    ///    Awake(), so no manual wiring needed for these five.
+    ///    Awake(), so no manual wiring needed for these six.
     /// 4. Other scripts can then reach everything via GameManager.Instance.*
     ///    instead of needing their own Inspector-assigned references.
     /// </summary>
@@ -26,6 +27,7 @@ namespace Biziwe.Systems
         public MissionManager Missions { get; private set; }
         public DayNightCycle DayNight { get; private set; }
         public PoliceDispatcher PoliceDispatch { get; private set; }
+        public SaveSystem Save { get; private set; }
 
         public Transform Player;
 
@@ -44,9 +46,20 @@ namespace Biziwe.Systems
             Missions = GetComponent<MissionManager>();
             DayNight = GetComponent<DayNightCycle>();
             PoliceDispatch = GetComponent<PoliceDispatcher>();
+            Save = GetComponent<SaveSystem>();
 
             if (Wanted == null) Debug.LogWarning("GameManager: no WantedSystem found on this object.");
             if (Economy == null) Debug.LogWarning("GameManager: no EconomySystem found on this object.");
+        }
+
+        private void Start()
+        {
+            Save?.Load(); // apply any saved progress once every system above has initialized
+
+            if (Missions != null && Save != null)
+            {
+                Missions.OnMissionCompleted += (id) => Save.RecordMissionCompleted(id);
+            }
         }
     }
 }

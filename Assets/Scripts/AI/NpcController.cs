@@ -25,6 +25,12 @@ namespace Biziwe.AI
         public float waitTimeAtPoint = 2f;
         public bool isPolice = false;
 
+        [Header("Police Combat (optional)")]
+        [Tooltip("Assign a Weapon component here (e.g. a pistol) for police to fight back during a chase.")]
+        public Biziwe.Weapons.Weapon equippedWeapon;
+        public float combatRange = 15f; // stops chasing and starts shooting once this close
+        public Transform aimPoint;      // usually the NPC's head/hand height
+
         private NavMeshAgent agent;
         private Systems.Health health;
         private int currentPoint;
@@ -67,7 +73,22 @@ namespace Biziwe.AI
 
             if (chaseTarget != null)
             {
-                agent.SetDestination(chaseTarget.position);
+                float distance = Vector3.Distance(transform.position, chaseTarget.position);
+
+                if (isPolice && equippedWeapon != null && distance <= combatRange)
+                {
+                    // Close enough to fight — stop closing distance further and shoot instead.
+                    agent.isStopped = true;
+                    transform.LookAt(new Vector3(chaseTarget.position.x, transform.position.y, chaseTarget.position.z));
+                    Vector3 fireDirection = ((aimPoint != null ? aimPoint.position : transform.position) - chaseTarget.position).normalized * -1f;
+                    if (equippedWeapon.CanFire) equippedWeapon.Fire(fireDirection);
+                }
+                else
+                {
+                    agent.isStopped = false;
+                    agent.SetDestination(chaseTarget.position);
+                }
+
                 agent.speed = isPolice ? 6f : 4f;
                 return;
             }

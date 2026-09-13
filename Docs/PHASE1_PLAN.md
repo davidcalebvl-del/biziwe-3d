@@ -18,7 +18,8 @@ Assets/Scripts/Player/CameraFollow.cs            — third-person camera
 Assets/Scripts/Player/CharacterCustomization.cs  — free-text name + appearance selection
 Assets/Scripts/Vehicle/VehicleController.cs      — drivable car physics
 Assets/Scripts/Vehicle/CarjackHandler.cs         — pull driver out, take the car
-Assets/Scripts/AI/NpcController.cs               — NPC patrol + chase behaviour
+Assets/Scripts/Vehicle/VehicleHealth.cs          — cars take damage, smoke, explode when destroyed
+Assets/Scripts/AI/NpcController.cs               — NPC patrol/chase; police now fight back in range
 Assets/Scripts/AI/CivilianNpc.cs                 — wandering civilians that flee danger
 Assets/Scripts/AI/CarjackVictim.cs               — victim shouts, flees, seeks a car, chases, fights
 Assets/Scripts/AI/PoliceVehicleAI.cs             — police cars drive-chase the player
@@ -37,6 +38,7 @@ Assets/Scripts/Systems/DayNightCycle.cs          — day/night sun + ambient lig
 Assets/Scripts/Systems/MissionManager.cs         — mission state tracking (runtime)
 Assets/Scripts/Systems/MissionData.cs            — mission definitions as data assets (scales to hundreds)
 Assets/Scripts/Systems/MissionTrigger.cs         — start/complete a mission by location
+Assets/Scripts/Systems/SaveSystem.cs             — persists money + mission progress between sessions
 Assets/Scripts/Weapons/Weapon.cs                 — pistols through the rocket launcher
 Assets/Scripts/Weapons/MeleeWeapon.cs            — knife combat with stealth finisher
 Assets/Scripts/Weapons/Explosive.cs              — bombs with area blast damage
