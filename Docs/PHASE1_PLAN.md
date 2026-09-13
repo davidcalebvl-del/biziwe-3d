@@ -27,6 +27,9 @@ Assets/Scripts/AI/TrafficCarAI.cs                — civilian traffic driving fi
 Assets/Scripts/AI/NpcSpawner.cs                  — population streaming/LOD pooling for civilians
 Assets/Scripts/World/BuildingEntrance.cs         — enter a building (shop, house, etc)
 Assets/Scripts/World/InteriorExit.cs             — leave the interior, back outside
+Assets/Scripts/World/AmbientLines.cs             — street chatter line bank (data)
+Assets/Scripts/World/AmbientChatter.cs           — pairs nearby civilians to talk near the player
+Assets/Scripts/World/DialogueBubble.cs           — floating text display for street chatter
 Assets/Scripts/Systems/GameManager.cs            — central hub for the systems below
 Assets/Scripts/Systems/Health.cs                 — shared damage/death component (player + NPCs)
 Assets/Scripts/Systems/WantedSystem.cs           — 3-star wanted level/police response

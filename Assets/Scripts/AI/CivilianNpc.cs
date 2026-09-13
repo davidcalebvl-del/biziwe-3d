@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using Biziwe.World;
 
 namespace Biziwe.AI
 {
@@ -31,13 +32,19 @@ namespace Biziwe.AI
         public float calmDownTime = 8f;
 
         private NavMeshAgent agent;
+        private DialogueBubble dialogueBubble;
         private float wanderTimer;
         private bool isFleeing;
         private float fleeTimer;
+        private bool isTalking;
+        private float talkTimer;
+
+        public bool IsAvailableToTalk => !isFleeing && !isTalking;
 
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+            dialogueBubble = GetComponent<DialogueBubble>();
         }
 
         private void Update()
@@ -53,12 +60,42 @@ namespace Biziwe.AI
                 return;
             }
 
+            if (isTalking)
+            {
+                talkTimer += Time.deltaTime;
+                if (talkTimer >= 2.5f) // matches DialogueBubble's default display duration
+                {
+                    isTalking = false;
+                    if (agent != null && agent.isOnNavMesh) agent.isStopped = false;
+                }
+                return;
+            }
+
             wanderTimer += Time.deltaTime;
             if (wanderTimer >= wanderInterval)
             {
                 wanderTimer = 0f;
                 WanderToRandomPoint();
             }
+        }
+
+        /// <summary>
+        /// Called by AmbientChatter to briefly pause this civilian for a bit of
+        /// street conversation — stops wandering, faces the other NPC, shows a
+        /// dialogue bubble if one is attached.
+        /// </summary>
+        public void StartTalking(string line, Transform faceTarget)
+        {
+            if (!IsAvailableToTalk) return;
+
+            isTalking = true;
+            talkTimer = 0f;
+
+            if (agent != null && agent.isOnNavMesh) agent.isStopped = true;
+            if (faceTarget != null)
+                transform.LookAt(new Vector3(faceTarget.position.x, transform.position.y, faceTarget.position.z));
+
+            dialogueBubble?.Show(line);
         }
 
         private void WanderToRandomPoint()
