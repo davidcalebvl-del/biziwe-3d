@@ -23,6 +23,10 @@ namespace Biziwe.Systems
     {
         private const string MoneyKey = "biziwe_money";
         private const string CompletedMissionsKey = "biziwe_completed_missions"; // comma-separated ids
+        private const string PlayerNameKey = "biziwe_player_name";
+        private const string AppearanceIndexKey = "biziwe_appearance_index";
+
+        public Player.CharacterCustomization characterCustomization; // optional — assign if using character creation
 
         public void Save()
         {
@@ -31,6 +35,12 @@ namespace Biziwe.Systems
 
             if (gm.Economy != null)
                 PlayerPrefs.SetInt(MoneyKey, gm.Economy.CurrentBalance);
+
+            if (characterCustomization != null)
+            {
+                PlayerPrefs.SetString(PlayerNameKey, characterCustomization.ChosenName);
+                PlayerPrefs.SetInt(AppearanceIndexKey, characterCustomization.ChosenAppearanceIndex);
+            }
 
             // MissionManager doesn't expose a full list directly — this saves
             // via a lightweight approach: call NotifyMissionCompleted(id) from
@@ -53,6 +63,12 @@ namespace Biziwe.Systems
                 int diff = savedBalance - gm.Economy.CurrentBalance;
                 if (diff > 0) gm.Economy.AddMoney(diff);
                 else if (diff < 0) gm.Economy.SpendMoney(-diff);
+            }
+
+            if (characterCustomization != null && PlayerPrefs.HasKey(PlayerNameKey))
+            {
+                characterCustomization.SetName(PlayerPrefs.GetString(PlayerNameKey));
+                characterCustomization.SetAppearance(PlayerPrefs.GetInt(AppearanceIndexKey, 0));
             }
         }
 

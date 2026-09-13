@@ -25,8 +25,10 @@ Assets/Scripts/AI/CarjackVictim.cs               — victim shouts, flees, seeks
 Assets/Scripts/AI/PoliceVehicleAI.cs             — police cars drive-chase the player
 Assets/Scripts/AI/TrafficCarAI.cs                — civilian traffic driving fixed routes
 Assets/Scripts/AI/NpcSpawner.cs                  — population streaming/LOD pooling for civilians
+Assets/Scripts/AI/NpcSchedule.cs                 — NPC daily routine (home/work/free-roam by time of day)
 Assets/Scripts/World/BuildingEntrance.cs         — enter a building (shop, house, etc)
 Assets/Scripts/World/InteriorExit.cs             — leave the interior, back outside
+Assets/Scripts/World/ShopInterior.cs             — actual buy ammo/weapons/healing, spends real money
 Assets/Scripts/World/AmbientLines.cs             — street chatter line bank (data)
 Assets/Scripts/World/AmbientChatter.cs           — pairs nearby civilians to talk near the player
 Assets/Scripts/World/DialogueBubble.cs           — floating text display for street chatter
@@ -34,14 +36,16 @@ Assets/Scripts/Systems/GameManager.cs            — central hub for the systems
 Assets/Scripts/Systems/Health.cs                 — shared damage/death component (player + NPCs)
 Assets/Scripts/Systems/WantedSystem.cs           — 3-star wanted level/police response
 Assets/Scripts/Systems/PoliceDispatcher.cs       — escalates police units as stars rise
+Assets/Scripts/Systems/RoadblockSystem.cs        — spawns police roadblocks at higher wanted levels
 Assets/Scripts/Systems/IDamageable.cs            — shared damage interface
 Assets/Scripts/Systems/Destructible.cs           — shops/houses/cars that can be destroyed
 Assets/Scripts/Systems/EconomySystem.cs          — money balance, capped at 1,000,000
 Assets/Scripts/Systems/DayNightCycle.cs          — day/night sun + ambient lighting
-Assets/Scripts/Systems/MissionManager.cs         — mission state tracking (runtime)
 Assets/Scripts/Systems/MissionData.cs            — mission definitions as data assets (scales to hundreds)
+Assets/Scripts/Systems/MissionDatabase.cs        — loads/looks up MissionData assets by id
+Assets/Scripts/Systems/MissionManager.cs         — mission state tracking (runtime)
 Assets/Scripts/Systems/MissionTrigger.cs         — start/complete a mission by location
-Assets/Scripts/Systems/SaveSystem.cs             — persists money + mission progress between sessions
+Assets/Scripts/Systems/SaveSystem.cs             — persists money, character, and mission progress
 Assets/Scripts/Weapons/Weapon.cs                 — pistols through the rocket launcher
 Assets/Scripts/Weapons/MeleeWeapon.cs            — knife combat with stealth finisher
 Assets/Scripts/Weapons/Explosive.cs              — bombs with area blast damage
