@@ -58,10 +58,33 @@ Assets/Scripts/UI/TouchInputManager.cs           — wires on-screen controls to
 Assets/Scripts/UI/GameHUD.cs                     — stars, money, ammo, mission text — auto-synced
 Assets/Scripts/UI/PauseMenu.cs                   — Resume/Options/Help/Quit, freezes gameplay
 Assets/Scripts/UI/LoadingScreen.cs               — title, tagline, real scene-load progress bar
+Assets/Scripts/UI/MainMenu.cs                    — title screen: New Game / Continue / Quit
+Assets/Scripts/UI/CharacterCreationScreen.cs     — name entry + appearance picker, before New Game starts
 Assets/Scripts/UI/MinimapCamera.cs               — top-down camera following the player
 Assets/Scripts/UI/MinimapIcon.cs                 — attach to anything that should show as a map dot
 Assets/Scripts/UI/MinimapController.cs           — positions the dots (police/civilian/mission colors)
 ```
+
+## Full flow: Main Menu → Character Creation → Game
+
+1. Player opens the app → **MainMenu** scene loads.
+2. "Continue" is only enabled if `SaveSystem.HasSaveData()` returns true
+   (checked automatically in `MainMenu.Start()`).
+3. **New Game** → shows `CharacterCreationScreen` → player types a name,
+   picks an appearance → Confirm saves it via
+   `SaveSystem.SaveInitialCharacter()` → `MainMenu.StartGame()`.
+4. **Continue** → skips character creation entirely → `MainMenu.StartGame()`
+   directly (existing save data restores automatically once the game
+   scene's own `SaveSystem.Load()` runs).
+5. `StartGame()` hands off to `LoadingScreen.BeginLoad(gameSceneName)` —
+   real progress bar, then the actual city scene loads.
+6. In the city scene, `GameManager` → `SaveSystem.Load()` applies the
+   saved money, mission progress, and character name/appearance
+   automatically — no extra wiring needed.
+
+Note: this means you'll want **two scenes** in Build Settings — a
+`MainMenu` scene and your main city scene (referenced by
+`MainMenu.gameSceneName`).
 
 ## Step-by-step setup (do this once you're on a PC/laptop)
 

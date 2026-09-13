@@ -28,6 +28,26 @@ namespace Biziwe.Systems
 
         public Player.CharacterCustomization characterCustomization; // optional — assign if using character creation
 
+        /// <summary>
+        /// Check for existing save data from anywhere — including the main
+        /// menu scene, before GameManager/SaveSystem even exist yet there.
+        /// Used to enable/disable a "Continue" button.
+        /// </summary>
+        public static bool HasSaveData() => PlayerPrefs.HasKey(MoneyKey);
+
+        /// <summary>
+        /// Called from the main menu's character creation screen — saves the
+        /// player's chosen name/appearance immediately, before the game scene
+        /// (and GameManager/SaveSystem instance within it) even exists yet.
+        /// The game scene's SaveSystem.Load() picks these up normally.
+        /// </summary>
+        public static void SaveInitialCharacter(string playerName, int appearanceIndex)
+        {
+            PlayerPrefs.SetString(PlayerNameKey, playerName);
+            PlayerPrefs.SetInt(AppearanceIndexKey, appearanceIndex);
+            PlayerPrefs.Save();
+        }
+
         public void Save()
         {
             var gm = GameManager.Instance;
