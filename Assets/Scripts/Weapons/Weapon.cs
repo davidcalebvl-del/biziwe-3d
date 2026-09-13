@@ -37,6 +37,7 @@ namespace Biziwe.Weapons
         public GameObject impactEffect;
         public LayerMask hitLayers = ~0;
         public Systems.WantedSystem wantedSystem; // optional — leave unassigned if this weapon shouldn't raise wanted level (e.g. a shooting-range prop)
+        public float gunfireAlertRadius = 20f; // civilians this close flee when a shot is fired
 
         private int currentAmmo;
         private float lastFireTime;
@@ -80,6 +81,17 @@ namespace Biziwe.Weapons
             }
 
             wantedSystem?.ReportCrime(1); // firing a weapon in public is a crime, hit or miss
+            AlertNearbyCivilians();
+        }
+
+        private void AlertNearbyCivilians()
+        {
+            Collider[] nearby = Physics.OverlapSphere(muzzlePoint.position, gunfireAlertRadius);
+            foreach (var col in nearby)
+            {
+                var civilian = col.GetComponent<AI.CivilianNpc>();
+                civilian?.ReactToDanger(muzzlePoint.position);
+            }
         }
 
         private void FireRocket(Vector3 aimDirection)
