@@ -16,6 +16,7 @@ minutes) and then drop these scripts in. Full steps below.
 Assets/Scripts/Player/PlayerController.cs        — walk, run, jump, crouch, dies via Health
 Assets/Scripts/Player/CameraFollow.cs            — third-person camera
 Assets/Scripts/Player/CharacterCustomization.cs  — free-text name + appearance selection
+Assets/Scripts/Player/PlayerAnimatorController.cs — smooth Idle/Walk/Run blending (see Docs/ANIMATION.md)
 Assets/Scripts/Vehicle/VehicleController.cs      — drivable car physics
 Assets/Scripts/Vehicle/VehicleStats.cs           — per-vehicle-type handling data (sports car vs. truck, etc.)
 Assets/Scripts/Vehicle/CarjackHandler.cs         — pull driver out, take the car
@@ -27,6 +28,7 @@ Assets/Scripts/AI/PoliceVehicleAI.cs             — police cars drive-chase the
 Assets/Scripts/AI/TrafficCarAI.cs                — civilian traffic driving fixed routes
 Assets/Scripts/AI/NpcSpawner.cs                  — population streaming/LOD pooling for civilians
 Assets/Scripts/AI/NpcSchedule.cs                 — NPC daily routine (home/work/free-roam by time of day)
+Assets/Scripts/AI/NpcAnimatorController.cs       — smooth Idle/Walk/Run blending for NPCs
 Assets/Scripts/World/BuildingEntrance.cs         — enter a building (shop, house, etc)
 Assets/Scripts/World/InteriorExit.cs             — leave the interior, back outside
 Assets/Scripts/World/ShopInterior.cs             — actual buy ammo/weapons/healing, spends real money
