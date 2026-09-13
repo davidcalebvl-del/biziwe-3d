@@ -44,12 +44,14 @@ namespace Biziwe.AI
             health = GetComponent<Systems.Health>();
             if (health != null)
                 health.OnDeath += HandleDeath;
+                health.OnRevive += HandleRevive;
         }
 
         private void OnDestroy()
         {
             if (health != null)
                 health.OnDeath -= HandleDeath;
+                health.OnRevive -= HandleRevive;
         }
 
         private void HandleDeath()
@@ -59,6 +61,13 @@ namespace Biziwe.AI
             if (agent != null && agent.isOnNavMesh)
                 agent.isStopped = true;
             // Hook: ragdoll/death animation here once art assets exist.
+        }
+
+        private void HandleRevive()
+        {
+            isDead = false;
+            if (agent != null && agent.isOnNavMesh)
+                agent.isStopped = false;
         }
 
         private void Start()

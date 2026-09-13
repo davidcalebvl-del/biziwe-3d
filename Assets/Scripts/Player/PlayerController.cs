@@ -56,12 +56,14 @@ namespace Biziwe.Player
             health = GetComponent<Systems.Health>();
             if (health != null)
                 health.OnDeath += HandleDeath;
+                health.OnRevive += HandleRevive;
         }
 
         private void OnDestroy()
         {
             if (health != null)
                 health.OnDeath -= HandleDeath;
+                health.OnRevive -= HandleRevive;
         }
 
         private void HandleDeath()
@@ -69,6 +71,12 @@ namespace Biziwe.Player
             isDead = true;
             // Hook: play death/ragdoll animation, trigger a respawn or game-over
             // screen here once that UI exists.
+        }
+
+        private void HandleRevive()
+        {
+            isDead = false;
+            velocity = Vector3.zero; // clear any leftover fall speed from before death
         }
 
         private void Update()

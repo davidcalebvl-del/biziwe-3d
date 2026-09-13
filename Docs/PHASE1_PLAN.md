@@ -17,6 +17,7 @@ Assets/Scripts/Player/PlayerController.cs        — walk, run, jump, crouch, di
 Assets/Scripts/Player/CameraFollow.cs            — third-person camera
 Assets/Scripts/Player/CharacterCustomization.cs  — free-text name + appearance selection
 Assets/Scripts/Player/PlayerAnimatorController.cs — smooth Idle/Walk/Run blending (see Docs/ANIMATION.md)
+Assets/Scripts/Player/PlayerRespawn.cs           — death screen, respawn at hospital, wanted cleared, money cost
 Assets/Scripts/Vehicle/VehicleController.cs      — drivable car physics
 Assets/Scripts/Vehicle/VehicleStats.cs           — per-vehicle-type handling data (sports car vs. truck, etc.)
 Assets/Scripts/Vehicle/CarjackHandler.cs         — pull driver out, take the car

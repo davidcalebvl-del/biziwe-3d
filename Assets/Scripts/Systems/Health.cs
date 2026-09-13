@@ -21,6 +21,7 @@ namespace Biziwe.Systems
 
         public event Action<float, float> OnHealthChanged; // (current, max)
         public event Action OnDeath;
+        public event Action OnRevive;
 
         private void Awake()
         {
@@ -53,6 +54,7 @@ namespace Biziwe.Systems
             IsDead = false;
             CurrentHealth = reviveHealth > 0f ? Mathf.Min(reviveHealth, maxHealth) : maxHealth;
             OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
+            OnRevive?.Invoke();
         }
     }
 }
