@@ -56,6 +56,11 @@ Assets/Scripts/Weapons/Explosive.cs              — bombs with area blast damag
 Assets/Scripts/Weapons/WeaponHolder.cs           — weapon inventory/switching
 Assets/Scripts/UI/TouchInputManager.cs           — wires on-screen controls to the above
 Assets/Scripts/UI/GameHUD.cs                     — stars, money, ammo, mission text — auto-synced
+Assets/Scripts/UI/PauseMenu.cs                   — Resume/Options/Help/Quit, freezes gameplay
+Assets/Scripts/UI/LoadingScreen.cs               — title, tagline, real scene-load progress bar
+Assets/Scripts/UI/MinimapCamera.cs               — top-down camera following the player
+Assets/Scripts/UI/MinimapIcon.cs                 — attach to anything that should show as a map dot
+Assets/Scripts/UI/MinimapController.cs           — positions the dots (police/civilian/mission colors)
 ```
 
 ## Step-by-step setup (do this once you're on a PC/laptop)
