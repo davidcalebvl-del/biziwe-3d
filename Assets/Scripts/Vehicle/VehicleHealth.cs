@@ -23,6 +23,10 @@ namespace Biziwe.Vehicle
         public float CurrentHealth { get; private set; }
         public bool IsDestroyed { get; private set; }
 
+        [Header("Vehicle Type (optional)")]
+        [Tooltip("If this vehicle also has a VehicleController with a Vehicle Stats asset assigned, its maxHealth value is used instead of the field above.")]
+        public VehicleStats stats;
+
         [Header("Damage Feedback")]
         [Range(0f, 1f)] public float smokeThreshold = 0.4f; // starts smoking below 40% health
         public GameObject smokeEffect;
@@ -36,6 +40,7 @@ namespace Biziwe.Vehicle
 
         private void Awake()
         {
+            if (stats != null) maxHealth = stats.maxHealth;
             CurrentHealth = maxHealth;
             vehicleController = GetComponent<VehicleController>();
         }

@@ -17,6 +17,7 @@ Assets/Scripts/Player/PlayerController.cs        — walk, run, jump, crouch, di
 Assets/Scripts/Player/CameraFollow.cs            — third-person camera
 Assets/Scripts/Player/CharacterCustomization.cs  — free-text name + appearance selection
 Assets/Scripts/Vehicle/VehicleController.cs      — drivable car physics
+Assets/Scripts/Vehicle/VehicleStats.cs           — per-vehicle-type handling data (sports car vs. truck, etc.)
 Assets/Scripts/Vehicle/CarjackHandler.cs         — pull driver out, take the car
 Assets/Scripts/Vehicle/VehicleHealth.cs          — cars take damage, smoke, explode when destroyed
 Assets/Scripts/AI/NpcController.cs               — NPC patrol/chase; police now fight back in range
@@ -29,6 +30,9 @@ Assets/Scripts/AI/NpcSchedule.cs                 — NPC daily routine (home/wor
 Assets/Scripts/World/BuildingEntrance.cs         — enter a building (shop, house, etc)
 Assets/Scripts/World/InteriorExit.cs             — leave the interior, back outside
 Assets/Scripts/World/ShopInterior.cs             — actual buy ammo/weapons/healing, spends real money
+Assets/Scripts/World/VehicleGarage.cs            — buy/spawn owned vehicles, real money spent
+Assets/Scripts/World/RaceCheckpoint.cs           — checkpoint + RaceManager for the Racing mission type
+Assets/Scripts/Systems/MissionCondition.cs       — gates missions on wanted level, time of day, or money
 Assets/Scripts/World/AmbientLines.cs             — street chatter line bank (data)
 Assets/Scripts/World/AmbientChatter.cs           — pairs nearby civilians to talk near the player
 Assets/Scripts/World/DialogueBubble.cs           — floating text display for street chatter

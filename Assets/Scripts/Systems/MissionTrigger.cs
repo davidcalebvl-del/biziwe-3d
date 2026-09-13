@@ -27,6 +27,9 @@ namespace Biziwe.Systems
         public bool completesMission = false;
         public int rewardMoney = 0;
 
+        [Tooltip("Optional — if a MissionCondition component is on this same GameObject, the trigger only fires once that condition is met (e.g. wanted level cleared, or it's night). Leave unassigned for a trigger with no condition.")]
+        public MissionCondition condition;
+
         private void OnValidate()
         {
             // Keeps manual and data-driven missions in sync without breaking
@@ -36,12 +39,14 @@ namespace Biziwe.Systems
                 missionId = missionData.id;
                 rewardMoney = missionData.rewardMoney;
             }
+            if (condition == null) condition = GetComponent<MissionCondition>();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             bool isPlayer = other.GetComponent<PlayerController>() != null;
             if (!isPlayer) return;
+            if (condition != null && !condition.IsMet()) return; // e.g. still wanted, or wrong time of day
 
             if (startsMission && missionManager.GetState(missionId) == MissionState.NotStarted)
             {

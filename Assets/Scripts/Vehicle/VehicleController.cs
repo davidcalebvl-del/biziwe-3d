@@ -28,9 +28,14 @@ namespace Biziwe.Vehicle
         public Transform rearRightMesh;
 
         [Header("Handling")]
+        [Tooltip("Overridden by 'stats' below if assigned — these fields stay as the fallback/manual defaults.")]
         public float maxMotorTorque = 1500f;
         public float maxSteerAngle = 30f;
         public float brakeTorque = 3000f;
+
+        [Header("Vehicle Type (optional)")]
+        [Tooltip("Assign a VehicleStats asset for this vehicle's category to auto-apply its handling numbers on Awake. Leave blank to use the manual fields above as-is.")]
+        public VehicleStats stats;
 
         private float steerInput;   // -1 to 1, wire to on-screen left/right buttons
         private float throttleInput; // -1 to 1, wire to on-screen gas/brake buttons
@@ -42,6 +47,14 @@ namespace Biziwe.Vehicle
         {
             rb = GetComponent<Rigidbody>();
             rb.centerOfMass = new Vector3(0f, -0.5f, 0f); // lower COM for stability
+
+            if (stats != null)
+            {
+                maxMotorTorque = stats.maxMotorTorque;
+                maxSteerAngle = stats.maxSteerAngle;
+                brakeTorque = stats.brakeTorque;
+                rb.mass = stats.mass;
+            }
         }
 
         // Call these from your on-screen touch buttons (see UI setup in Docs/PHASE1_PLAN.md)
