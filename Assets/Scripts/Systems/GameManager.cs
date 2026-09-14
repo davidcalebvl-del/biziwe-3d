@@ -30,6 +30,8 @@ namespace Biziwe.Systems
         public PoliceDispatcher PoliceDispatch { get; private set; }
         public RoadblockSystem Roadblocks { get; private set; }
         public SaveSystem Save { get; private set; }
+        public MusicManager Music { get; private set; }
+        public CityAmbience Ambience { get; private set; }
 
         public Transform Player;
 
@@ -51,6 +53,8 @@ namespace Biziwe.Systems
             PoliceDispatch = GetComponent<PoliceDispatcher>();
             Roadblocks = GetComponent<RoadblockSystem>();
             Save = GetComponent<SaveSystem>();
+            Music = GetComponent<MusicManager>();
+            Ambience = GetComponent<CityAmbience>();
 
             if (Wanted == null) Debug.LogWarning("GameManager: no WantedSystem found on this object.");
             if (Economy == null) Debug.LogWarning("GameManager: no EconomySystem found on this object.");

@@ -37,6 +37,11 @@ namespace Biziwe.Vehicle
         [Tooltip("Assign a VehicleStats asset for this vehicle's category to auto-apply its handling numbers on Awake. Leave blank to use the manual fields above as-is.")]
         public VehicleStats stats;
 
+        [Header("Engine Audio (optional)")]
+        public AudioSource engineAudioSource; // assign a looping engine sound here
+        [Range(0.5f, 1f)] public float minEnginePitch = 0.7f;
+        [Range(1f, 3f)] public float maxEnginePitch = 1.8f;
+
         private float steerInput;   // -1 to 1, wire to on-screen left/right buttons
         private float throttleInput; // -1 to 1, wire to on-screen gas/brake buttons
         private bool handbrake;
@@ -54,6 +59,12 @@ namespace Biziwe.Vehicle
                 maxSteerAngle = stats.maxSteerAngle;
                 brakeTorque = stats.brakeTorque;
                 rb.mass = stats.mass;
+            }
+
+            if (engineAudioSource != null)
+            {
+                engineAudioSource.loop = true;
+                if (!engineAudioSource.isPlaying) engineAudioSource.Play();
             }
         }
 
@@ -80,6 +91,19 @@ namespace Biziwe.Vehicle
             UpdateWheelMesh(frontRightCollider, frontRightMesh);
             UpdateWheelMesh(rearLeftCollider, rearLeftMesh);
             UpdateWheelMesh(rearRightCollider, rearRightMesh);
+
+            UpdateEngineSound();
+        }
+
+        private void UpdateEngineSound()
+        {
+            if (engineAudioSource == null) return;
+
+            // Pitch rises with speed AND throttle input — gives that
+            // "revving" feel even from a standstill, not just while moving.
+            float speedFactor = Mathf.Clamp01(rb.velocity.magnitude / 25f);
+            float throttleFactor = Mathf.Abs(throttleInput) * 0.3f;
+            engineAudioSource.pitch = Mathf.Lerp(minEnginePitch, maxEnginePitch, speedFactor + throttleFactor);
         }
 
         private void UpdateWheelMesh(WheelCollider col, Transform mesh)

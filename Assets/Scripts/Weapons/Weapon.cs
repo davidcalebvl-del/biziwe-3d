@@ -34,6 +34,7 @@ namespace Biziwe.Weapons
         [Header("Refs")]
         public Transform muzzlePoint;
         public GameObject fireEffect;
+        public AudioClip fireSound;
         public GameObject impactEffect;
         public LayerMask hitLayers = ~0;
         public Systems.WantedSystem wantedSystem; // optional — leave unassigned if this weapon shouldn't raise wanted level (e.g. a shooting-range prop)
@@ -58,6 +59,9 @@ namespace Biziwe.Weapons
 
             if (fireEffect != null && muzzlePoint != null)
                 Instantiate(fireEffect, muzzlePoint.position, muzzlePoint.rotation);
+
+            if (fireSound != null && muzzlePoint != null)
+                AudioSource.PlayClipAtPoint(fireSound, muzzlePoint.position);
 
             if (type == WeaponType.RocketLauncher)
             {

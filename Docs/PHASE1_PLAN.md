@@ -53,6 +53,9 @@ Assets/Scripts/Systems/MissionDatabase.cs        — loads/looks up MissionData 
 Assets/Scripts/Systems/MissionManager.cs         — mission state tracking (runtime)
 Assets/Scripts/Systems/MissionTrigger.cs         — start/complete a mission by location
 Assets/Scripts/Systems/SaveSystem.cs             — persists money, character, and mission progress
+Assets/Scripts/Systems/MusicManager.cs           — reactive background music (explore/chase/mission)
+Assets/Scripts/Systems/CityAmbience.cs           — day/night looping city atmosphere
+Assets/Scripts/Systems/PoliceSirenAudio.cs       — siren on/off tied to active police chases
 Assets/Scripts/Weapons/Weapon.cs                 — pistols through the rocket launcher
 Assets/Scripts/Weapons/MeleeWeapon.cs            — knife combat with stealth finisher
 Assets/Scripts/Weapons/Explosive.cs              — bombs with area blast damage

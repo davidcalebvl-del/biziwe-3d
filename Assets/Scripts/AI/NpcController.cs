@@ -36,6 +36,7 @@ namespace Biziwe.AI
         private int currentPoint;
         private float waitTimer;
         private Transform chaseTarget;
+        public bool IsChasing => chaseTarget != null;
         private bool isDead;
 
         private void Awake()
