@@ -137,3 +137,20 @@ big and broken.
 See the original full vision doc for Phase 2 onward (more vehicles, more
 NPC behaviours, traffic, better police AI) — we'll tackle that once Phase 1
 is playable and stable on your device.
+
+## Act 1 missions — now built as real scripts
+
+`Assets/Scripts/Missions/` has the first three story missions from
+`Docs/STORY.md` implemented as actual playable sequences, not just the
+outline:
+
+```
+Assets/Scripts/Missions/Mission_TheErrand.cs   — first delivery job
+Assets/Scripts/Missions/Mission_TheSetup.cs    — ambush + escape
+Assets/Scripts/Missions/Mission_MadeMan.cs     — Act 1 closer, meets Chairman
+```
+
+Each chains into the next via `requiresMissionId`, matching the campaign
+order. Dialogue currently logs to the Console (`Debug.Log`) as a
+placeholder — swap those for a real dialogue UI once you've built one;
+the mission logic itself doesn't need to change.
