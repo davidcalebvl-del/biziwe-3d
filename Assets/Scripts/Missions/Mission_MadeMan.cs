@@ -67,9 +67,14 @@ namespace Biziwe.Missions
 
         private void PlayConversation()
         {
-            foreach (var line in conversationLines)
+            if (UI.DialogueUI.Instance != null)
             {
-                Debug.Log(line); // hook: route to a real dialogue UI once built
+                UI.DialogueUI.Instance.ShowSequence(conversationLines);
+            }
+            else
+            {
+                foreach (var line in conversationLines)
+                    Debug.Log(line); // DialogueUI not in the scene yet — falls back safely
             }
         }
     }

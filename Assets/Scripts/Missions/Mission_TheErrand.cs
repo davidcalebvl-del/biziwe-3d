@@ -39,7 +39,13 @@ namespace Biziwe.Missions
 
             missionManager.StartMission(missionId);
             active = true;
-            Debug.Log(introLine); // hook: route to your dialogue UI instead of Console once built
+            ShowLine(introLine);
+        }
+
+        private void ShowLine(string line)
+        {
+            if (UI.DialogueUI.Instance != null) UI.DialogueUI.Instance.ShowSequence(new[] { line });
+            else Debug.Log(line); // DialogueUI not in the scene yet — falls back safely
         }
 
         private void Update()
@@ -63,12 +69,12 @@ namespace Biziwe.Missions
             bool arrivedClean = gm.Wanted == null || gm.Wanted.wantedLevel == 0;
             if (arrivedClean)
             {
-                Debug.Log(successLine);
+                ShowLine(successLine);
                 missionManager.CompleteMission(missionId, rewardMoney);
             }
             else
             {
-                Debug.Log(failLine);
+                ShowLine(failLine);
                 missionManager.CompleteMission(missionId, rewardMoney / 2); // still counts, smaller payout — mirrors "brought heat" consequence
             }
         }

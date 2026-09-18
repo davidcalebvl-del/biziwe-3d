@@ -75,8 +75,14 @@ namespace Biziwe.Missions
                 missionManager.StartMission(missionId);
                 SpawnAmbush();
                 stage = Stage.Ambushed;
-                Debug.Log(ambushLine);
+                ShowLine(ambushLine);
             }
+        }
+
+        private void ShowLine(string line)
+        {
+            if (UI.DialogueUI.Instance != null) UI.DialogueUI.Instance.ShowSequence(new[] { line });
+            else Debug.Log(line); // DialogueUI not in the scene yet — falls back safely
         }
 
         private void SpawnAmbush()
@@ -107,7 +113,7 @@ namespace Biziwe.Missions
             if (dist <= escapeRadius)
             {
                 stage = Stage.Done;
-                Debug.Log(escapeLine);
+                ShowLine(escapeLine);
                 missionManager.CompleteMission(missionId, rewardMoney);
             }
         }
