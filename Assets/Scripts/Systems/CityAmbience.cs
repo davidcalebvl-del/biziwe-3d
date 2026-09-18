@@ -29,8 +29,10 @@ namespace Biziwe.Systems
         public AudioClip nightAmbience;
         public DayNightCycle dayNightCycle;
 
-        [Range(0f, 1f)] public float ambienceVolume = 0.35f;
+        [Range(0f, 1f)] public float ambienceVolume = 0.35f; // base level before the player's Settings slider is applied
         public float fadeDuration = 4f; // slower fade than music — ambience shifts should feel gradual
+
+        private float EffectiveVolume => ambienceVolume * AudioPreferences.AmbienceVolume;
 
         private bool isNight;
         private Coroutine fadeCoroutine;
@@ -41,6 +43,22 @@ namespace Biziwe.Systems
             inactiveSource = sourceB;
         }
 
+        private void OnEnable()
+        {
+            AudioPreferences.OnChanged += ApplyVolumeImmediate;
+        }
+
+        private void OnDisable()
+        {
+            AudioPreferences.OnChanged -= ApplyVolumeImmediate;
+        }
+
+        private void ApplyVolumeImmediate()
+        {
+            if (activeSource != null && activeSource.isPlaying)
+                activeSource.volume = EffectiveVolume;
+        }
+
         private void Start()
         {
             if (dayNightCycle == null || dayAmbience == null) return;
@@ -48,7 +66,7 @@ namespace Biziwe.Systems
             isNight = dayNightCycle.IsNight;
             activeSource.clip = isNight ? nightAmbience : dayAmbience;
             activeSource.loop = true;
-            activeSource.volume = ambienceVolume;
+            activeSource.volume = EffectiveVolume;
             activeSource.Play();
         }
 
@@ -80,8 +98,8 @@ namespace Biziwe.Systems
             {
                 t += Time.deltaTime;
                 float progress = t / fadeDuration;
-                activeSource.volume = Mathf.Lerp(ambienceVolume, 0f, progress);
-                inactiveSource.volume = Mathf.Lerp(0f, ambienceVolume, progress);
+                activeSource.volume = Mathf.Lerp(EffectiveVolume, 0f, progress);
+                inactiveSource.volume = Mathf.Lerp(0f, EffectiveVolume, progress);
                 yield return null;
             }
 

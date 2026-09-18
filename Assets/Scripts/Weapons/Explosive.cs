@@ -55,7 +55,7 @@ namespace Biziwe.Weapons
                 Instantiate(explosionEffect, transform.position, Quaternion.identity);
 
             if (explosionSound != null)
-                AudioSource.PlayClipAtPoint(explosionSound, transform.position);
+                AudioSource.PlayClipAtPoint(explosionSound, transform.position, Systems.AudioPreferences.SfxVolume);
 
             Collider[] hits = Physics.OverlapSphere(transform.position, blastRadius, affectedLayers);
             foreach (var hit in hits)

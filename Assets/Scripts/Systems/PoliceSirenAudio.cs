@@ -43,6 +43,7 @@ namespace Biziwe.Systems
                 wasChasing = isChasing;
                 if (sirenSource == null) return;
 
+                sirenSource.volume = AudioPreferences.SfxVolume;
                 if (isChasing) sirenSource.Play();
                 else sirenSource.Stop();
             }

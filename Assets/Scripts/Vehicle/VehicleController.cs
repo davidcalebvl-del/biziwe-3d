@@ -41,6 +41,7 @@ namespace Biziwe.Vehicle
         public AudioSource engineAudioSource; // assign a looping engine sound here
         [Range(0.5f, 1f)] public float minEnginePitch = 0.7f;
         [Range(1f, 3f)] public float maxEnginePitch = 1.8f;
+        [Range(0f, 1f)] public float engineBaseVolume = 0.7f; // before the player's SFX Settings slider is applied
 
         private float steerInput;   // -1 to 1, wire to on-screen left/right buttons
         private float throttleInput; // -1 to 1, wire to on-screen gas/brake buttons
@@ -104,6 +105,7 @@ namespace Biziwe.Vehicle
             float speedFactor = Mathf.Clamp01(rb.velocity.magnitude / 25f);
             float throttleFactor = Mathf.Abs(throttleInput) * 0.3f;
             engineAudioSource.pitch = Mathf.Lerp(minEnginePitch, maxEnginePitch, speedFactor + throttleFactor);
+            engineAudioSource.volume = engineBaseVolume * Systems.AudioPreferences.SfxVolume;
         }
 
         private void UpdateWheelMesh(WheelCollider col, Transform mesh)

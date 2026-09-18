@@ -33,6 +33,8 @@ namespace Biziwe.UI
         public Text missionText;
         public Text ammoText;
 
+        private int previousWantedLevel;
+
         private void OnEnable()
         {
             if (wantedSystem != null) wantedSystem.OnWantedLevelChanged += UpdateStars;
@@ -60,7 +62,11 @@ namespace Biziwe.UI
         private void Start()
         {
             // Initialize with current values rather than waiting for the first change event.
-            if (wantedSystem != null) UpdateStars(wantedSystem.wantedLevel);
+            if (wantedSystem != null)
+            {
+                previousWantedLevel = wantedSystem.wantedLevel; // set before UpdateStars so load doesn't fire a false "Wanted Level Up" toast
+                UpdateStars(wantedSystem.wantedLevel);
+            }
             if (economySystem != null) UpdateMoney(economySystem.CurrentBalance);
         }
 
@@ -82,6 +88,10 @@ namespace Biziwe.UI
                 if (starIcons[i] == null) continue;
                 starIcons[i].color = i < level ? starFilledColor : starEmptyColor;
             }
+
+            if (level > previousWantedLevel)
+                NotificationToast.Instance?.Show(level >= 3 ? "MAX WANTED LEVEL" : $"Wanted Level {level}");
+            previousWantedLevel = level;
         }
 
         private void UpdateMoney(int balance)
@@ -92,16 +102,19 @@ namespace Biziwe.UI
         private void HandleMissionStarted(string id)
         {
             if (missionText != null) missionText.text = $"Objective: {id}";
+            NotificationToast.Instance?.Show("Mission Started");
         }
 
         private void HandleMissionCompleted(string id)
         {
             if (missionText != null) missionText.text = $"{id} — Complete";
+            NotificationToast.Instance?.Show("Mission Complete");
         }
 
         private void HandleMissionFailed(string id)
         {
             if (missionText != null) missionText.text = $"{id} — Failed";
+            NotificationToast.Instance?.Show("Mission Failed");
         }
     }
 }

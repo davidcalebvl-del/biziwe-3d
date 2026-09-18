@@ -39,7 +39,9 @@ namespace Biziwe.Systems
 
         [Header("Crossfade")]
         public float fadeDuration = 1.5f;
-        [Range(0f, 1f)] public float musicVolume = 0.6f;
+        [Range(0f, 1f)] public float musicVolume = 0.6f; // base level before the player's Settings slider is applied
+
+        private float EffectiveVolume => musicVolume * AudioPreferences.MusicVolume;
 
         private MusicState currentState = MusicState.Explore;
         private Coroutine fadeCoroutine;
@@ -54,12 +56,21 @@ namespace Biziwe.Systems
         {
             if (wantedSystem != null)
                 wantedSystem.OnWantedLevelChanged += HandleWantedLevelChanged;
+            AudioPreferences.OnChanged += ApplyVolumeImmediate;
         }
 
         private void OnDisable()
         {
             if (wantedSystem != null)
                 wantedSystem.OnWantedLevelChanged -= HandleWantedLevelChanged;
+            AudioPreferences.OnChanged -= ApplyVolumeImmediate;
+        }
+
+        /// <summary>Applies a Settings-slider change immediately to whichever source is currently playing, without waiting for a state change.</summary>
+        private void ApplyVolumeImmediate()
+        {
+            if (activeSource != null && activeSource.isPlaying)
+                activeSource.volume = EffectiveVolume;
         }
 
         private void HandleWantedLevelChanged(int level)
@@ -107,7 +118,7 @@ namespace Biziwe.Systems
                 t += Time.deltaTime;
                 float progress = t / fadeDuration;
                 activeSource.volume = Mathf.Lerp(startVolume, 0f, progress);
-                inactiveSource.volume = Mathf.Lerp(0f, musicVolume, progress);
+                inactiveSource.volume = Mathf.Lerp(0f, EffectiveVolume, progress);
                 yield return null;
             }
 

@@ -61,7 +61,7 @@ namespace Biziwe.Weapons
                 Instantiate(fireEffect, muzzlePoint.position, muzzlePoint.rotation);
 
             if (fireSound != null && muzzlePoint != null)
-                AudioSource.PlayClipAtPoint(fireSound, muzzlePoint.position);
+                AudioSource.PlayClipAtPoint(fireSound, muzzlePoint.position, Systems.AudioPreferences.SfxVolume);
 
             if (type == WeaponType.RocketLauncher)
             {

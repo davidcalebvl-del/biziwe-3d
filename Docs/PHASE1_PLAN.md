@@ -62,6 +62,9 @@ Assets/Scripts/Weapons/Explosive.cs              — bombs with area blast damag
 Assets/Scripts/Weapons/WeaponHolder.cs           — weapon inventory/switching
 Assets/Scripts/UI/TouchInputManager.cs           — wires on-screen controls to the above
 Assets/Scripts/UI/GameHUD.cs                     — stars, money, ammo, mission text — auto-synced
+Assets/Scripts/UI/NotificationToast.cs           — pop-up banner for mission/wanted events
+Assets/Scripts/UI/SettingsMenu.cs                — Options screen: Music/Ambience/SFX volume sliders
+Assets/Scripts/Systems/AudioPreferences.cs       — shared, persisted volume levels read by every audio script
 Assets/Scripts/UI/PauseMenu.cs                   — Resume/Options/Help/Quit, freezes gameplay
 Assets/Scripts/UI/LoadingScreen.cs               — title, tagline, real scene-load progress bar
 Assets/Scripts/UI/MainMenu.cs                    — title screen: New Game / Continue / Quit
